@@ -1,0 +1,59 @@
+services:
+  - type: web
+    name: hive-prospector-qualifier
+    runtime: node
+    plan: starter
+    buildCommand: npm install
+    startCommand: node server.js
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+
+      # Shared HMAC secret with hivebank — same value as PROSPECTOR_QUALIFIER_SECRET on hivebank
+      - key: PROSPECTOR_QUALIFIER_SECRET
+        sync: false
+
+      # Stable identity for this qualifier instance
+      - key: QUALIFIER_DID
+        value: did:hive:prospector-qualifier-001
+
+      # Hivebank admit endpoint — qualifier POSTs here after minting tokens
+      - key: HIVEBANK_BASE_URL
+        value: https://hivebank.onrender.com
+
+      # Same HIVE_INTERNAL_KEY value as hivebank — required to call /v1/bank/prospector/admit
+      - key: HIVE_INTERNAL_KEY
+        sync: false
+
+      # Ed25519 signing key for ZK tickets — generate once, keep secret
+      # ed25519 secret key (64-byte tweetnacl format), base64url-encoded
+      - key: ZK_TICKET_ED25519_SECRET_B64
+        sync: false
+
+      # Public key for verifiers — base64url Ed25519 32-byte public
+      - key: ZK_TICKET_ED25519_PUBLIC_B64
+        sync: false
+
+      # Hive treasury address that valid x402 payments must land in
+      - key: HIVE_TREASURY_ADDRESS
+        value: 0x15184bf50b3d3f52b60434f8942b7d52f2eb436e
+
+      # Base L2 RPC for on-chain verification
+      - key: BASE_RPC_URL
+        value: https://1rpc.io/base
+
+      # Window for the 3-paid-call qualification (days)
+      - key: WINDOW_DAYS
+        value: "30"
+
+      # Minimum unique paid x402 calls to qualify
+      - key: MIN_PAID_CALLS
+        value: "3"
+
+      # Token TTL after minting (seconds) — caller must use within this window
+      - key: TOKEN_TTL_SEC
+        value: "604800"

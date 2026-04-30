@@ -1,0 +1,24 @@
+{
+  "name": "hive-prospector-qualifier",
+  "version": "1.0.0",
+  "description": "Hive Civilization — Prospector qualifier. Verifies 3 on-chain x402 paid calls into Hive surfaces, mints HMAC qualification_token + Ed25519 ZK ticket, and admits the caller to hivebank's prospector route.",
+  "type": "commonjs",
+  "main": "server.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node test/qualifier.test.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "tweetnacl": "^1.0.3"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/srotzin/hive-prospector-qualifier.git"
+  }
+}
